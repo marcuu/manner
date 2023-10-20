@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
   });
   
   function loadMeals() {
-    fetch('http://localhost:3000/api/meals')  // Replace with your API endpoint
+    fetch('https://manner-app-cd431d92f8c3.herokuapp.com/api/meals')  // Replace with your API endpoint
       .then(response => response.json())
       .then(data => displayMeals(data))
       .catch(error => console.error('Error:', error));
