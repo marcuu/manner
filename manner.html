@@ -1,112 +1,254 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manner Meal Planner</title>
-<style>
-  body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f4f4f4;
-  margin: 0;
-  padding: 20px;
-}
-
-#meal-planner {
-  background-color: #ffffff;
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-#meal-planner h1 {
-  color: #333333;
-  text-align: center;
-}
-
-#meal-planner p {
-  text-align: center;
-  color: #666666;
-}
-
-#days div {
-  margin-bottom: 10px;
-}
-
-select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #dddddd;
-  border-radius: 4px;
-  background-color: #ffffff;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-button {
-  width: 100%;
-  background-color: #0056b3;
-  color: white;
-  padding: 15px;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #003d82;
-}
-
-#shopping-list {
-  background-color: #ffffff;
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-#shopping-list h2 {
-  color: #333333;
-  text-align: center;
-}
-
-#shopping-list ul {
-  list-style: none;
-  padding: 0;
-}
-
-#shopping-list li {
-  background-color: #e7e7e7;
-  margin-bottom: 5px;
-  padding: 10px;
-  border-radius: 4px;
-}
-
-</style>
-</head>
-<body>
-  <div id="meal-planner">
-    <h1>Manner</h1>
-    <p>Meal planning is annoying. This makes it easy, for free.</p>
-    <div id="days">
-      <div>Monday: <select id="monday"></select></div>
-      <div>Tuesday: <select id="tuesday"></select></div>
-      <div>Wednesday: <select id="wednesday"></select></div>
-      <div>Thursday: <select id="thursday"></select></div>
-      <div>Friday: <select id="friday"></select></div>
-      <div>Saturday: <select id="saturday"></select></div>
-      <div>Sunday: <select id="sunday"></select></div>
-    </div>
-    <button id="plan-meals">Plan my meals</button>
-  </div>
-  <div id="shopping-list">
-    <!-- The shopping list will be generated here -->
-  </div>
-<script src="app.js"></script>
-</body>
-</html>
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Manner Meal Planner</title>
+
+<style>
+
+  body {
+
+  font-family: 'Arial', sans-serif;
+
+  background-color: #f4f4f4;
+
+  margin: 0;
+
+  padding: 20px;
+
+}
+
+
+
+#meal-planner {
+
+  background-color: #ffffff;
+
+  max-width: 600px;
+
+  margin: 40px auto;
+
+  padding: 20px;
+
+  border-radius: 8px;
+
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+}
+
+
+
+#meal-planner h1 {
+
+  color: #333333;
+
+  text-align: center;
+
+}
+
+
+
+#meal-planner p {
+
+  text-align: center;
+
+  color: #666666;
+
+}
+
+
+
+#days div {
+
+  margin-bottom: 10px;
+
+}
+
+
+
+select {
+
+  width: 100%;
+
+  padding: 10px;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 4px;
+
+  background-color: #ffffff;
+
+  -webkit-appearance: none;
+
+  -moz-appearance: none;
+
+  appearance: none;
+
+}
+
+
+
+button {
+
+  width: 100%;
+
+  background-color: #0056b3;
+
+  color: white;
+
+  padding: 15px;
+
+  border: none;
+
+  border-radius: 4px;
+
+  font-size: 16px;
+
+  cursor: pointer;
+
+}
+
+
+
+button:hover {
+
+  background-color: #003d82;
+
+}
+
+
+
+#shopping-list {
+
+  background-color: #ffffff;
+
+  max-width: 600px;
+
+  margin: 20px auto;
+
+  padding: 20px;
+
+  border-radius: 8px;
+
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+}
+
+
+
+#shopping-list h2 {
+
+  color: #333333;
+
+  text-align: center;
+
+}
+
+
+
+#shopping-list ul {
+
+  list-style: none;
+
+  padding: 0;
+
+}
+
+
+
+#shopping-list li {
+
+  background-color: #e7e7e7;
+
+  margin-bottom: 5px;
+
+  padding: 10px;
+
+  border-radius: 4px;
+
+}
+
+
+
+</style>
+
+</head>
+
+<body>
+
+  <div id="meal-planner">
+
+    <h1>Manner</h1>
+
+    <p>Meal planning is annoying. This makes it easy, for free.</p>
+
+    <div id="days">
+
+      <div class="day-container">
+        <label for="monday">Monday:</label>
+        <select id="monday" aria-label="Select meal for Monday">  
+        </select>
+      </div>
+
+      <div class="day-container">
+        <label for="tuesday">Tuesday:</label>
+        <select id="tuesday" aria-label="Select meal for Tuesday">
+        </select>
+      </div>
+      
+      <div class="day-container">
+        <label for="wednesday">Wednesday:</label>
+        <select id="wednesday" aria-label="Select meal for Wednesday">
+        </select>
+      </div>
+
+      <div class="day-container">
+        <label for="thursday">Thursday:</label>
+        <select id="thursday" aria-label="Select meal for Thursday">
+        </select>
+      </div>
+
+ <div class="day-container">
+        <label for="friday">Friday:</label>
+        <select id="friday" aria-label="Select meal for Friday">
+        </select>
+      </div>
+
+      <div class="day-container">
+        <label for="saturday">Saturday:</label>
+        <select id="saturday" aria-label="Select meal for Saturday">
+        </select>
+      </div>
+
+      <div class="day-container">
+        <label for="sunday">Sunday:</label>
+        <select id="sunday" aria-label="Select meal for Sunday">
+        </select>
+      </div>
+
+    </div>
+
+    <button id="plan-meals">Plan my meals</button>
+
+  </div>
+
+  <div id="days">
+    
+  <div id="shopping-list">
+
+    <!-- The shopping list will be generated here -->
+
+  </div>
+
+<script src="app.js"></script>
+
+</body>
+
+</html>
+
