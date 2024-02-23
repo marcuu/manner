@@ -105,8 +105,13 @@ The Flask Recipes API provides functionalities to manage and retrieve recipes an
 
 
 
-# Adding recipes directly in pythonanywhere
-Usually I just add a recipe using SQL using the PA console. 
+# Updating recipes directly in pythonanywhere
+You can check the current list of recipes and their corresponding ID directly in pythonanywhere's MySQL console
+```
+SELECT id, name FROM recipes ORDER BY id;
+```
+
+You can add a recipe using the SQL console
 
 ```
 INSERT INTO recipes (name) VALUES 
@@ -120,4 +125,16 @@ INSERT INTO ingredients (recipe_id, ingredient_name) VALUES
 (25, 'Courgette'),
 (25, 'Onion'),
 (25, 'Garlic');
+```
+
+You can also delete recipes by first deleting their ingredients 
+
+```
+DELETE FROM ingredients WHERE recipe_id IN (4, 6);
+```
+
+Then you can delete the recipe entirely 
+
+```
+DELETE FROM recipes WHERE id IN (4, 6);
 ```
