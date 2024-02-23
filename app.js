@@ -4,19 +4,29 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('plan-meals').addEventListener('click', generateShoppingList);
 });
 
-function populateAllMealDropdowns() {
-  fetch('https://marcuu.pythonanywhere.com/recipes', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Token d7d9b014bc89742181d8dfd65270e6386e6f7833'
+async function populateAllMealDropdowns() {
+  const MAX_RETRIES = 3; // Define the maximum number of retry attempts
+  let retries = 0;
+
+  try {
+    const response = await fetch('https://marcuu.pythonanywhere.com/recipes', {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Token d7d9b014bc89742181d8dfd65270e6386e6f7833'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Network response error: ${response.status}`);
     }
-  })
-  .then(response => response.json())
-  .then(meals => {
+
+    const meals = await response.json();
+
     const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
     daysOfWeek.forEach(day => {
       const select = document.getElementById(day);
-      // Add the default option as the first option element in the select
+
+      // Add the default option
       const defaultOption = document.createElement('option');
       defaultOption.textContent = 'Choose a meal';
       defaultOption.value = '';
@@ -25,7 +35,7 @@ function populateAllMealDropdowns() {
       defaultOption.hidden = true; // Hide this option once others are available
       select.appendChild(defaultOption);
 
-      // Populate each dropdown with the same set of meal options
+      // Populate the dropdown with meal options
       meals.forEach(meal => {
         const option = document.createElement('option');
         option.value = meal;
@@ -33,23 +43,28 @@ function populateAllMealDropdowns() {
         select.appendChild(option);
       });
     });
-  })
-  .catch(error => {
-    console.error('Error fetching meals:', error);
-
-    // Create and style the error message element
-    const errorMessage = document.createElement('div');
-    errorMessage.classList.add('error-message'); // Add a CSS class for styling
-    errorMessage.textContent = 'An error occurred while fetching meals. Please try again later.';
-
-    // Insert the error message at the top of the page
-    const firstElement = document.body.firstChild;
-    if (firstElement) {
-      document.body.insertBefore(errorMessage, firstElement);
+  } catch (error) {
+    retries++;
+    if (retries < MAX_RETRIES) {
+      console.warn(`Retrying meal dropdown population (attempt ${retries}/${MAX_RETRIES})...`);
+      await populateAllMealDropdowns(); // Retry recursively
     } else {
-      document.body.appendChild(errorMessage);
+      console.error('Error fetching meals:', error);
+
+      // Create and style the error message element
+      const errorMessage = document.createElement('div');
+      errorMessage.classList.add('error-message');
+      errorMessage.textContent = 'An error occurred while fetching meals. Please try refreshing the page.';
+
+      // Insert the error message at the top of the page
+      const firstElement = document.body.firstChild;
+      if (firstElement) {
+        document.body.insertBefore(errorMessage, firstElement);
+      } else {
+        document.body.appendChild(errorMessage);
+      }
     }
-  });
+  }
 }
 function generateShoppingList() {
   const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
