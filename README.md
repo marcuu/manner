@@ -2,7 +2,7 @@
 
 ## Overview
 
-Manner is a web app designed to simplify the process of planning meals for the week. It allows users to select meals from a dropdown menu for each day of the week and automatically generates a shopping list based on the selected meals.
+Manner is a web application designed to simplify the process of planning meals for the week. It enables users to select meals from a dropdown menu for each day of the week and automatically generates a shopping list based on the selected meals.
 
 ## Features
 
@@ -12,7 +12,7 @@ Users can choose meals from a dropdown list for each day of the week. The list o
 
 ### Shopping List Generation
 
-The app compiles a list of ingredients needed for the selected meals (retrieved from the API) and presents it in an easy-to-read format.
+The application compiles a list of ingredients needed for the selected meals (retrieved from the API) and presents it in an easy-to-read format.
 
 ### Responsive Design
 
@@ -23,7 +23,7 @@ The application is built to be responsive, ensuring a seamless experience across
 - **Frontend:** HTML, CSS, JavaScript
 - **Backend:** Python (Flask)
 - **Database:** SQL (MySQL)
-- **Hosting:** PythonAnywhere
+- **Hosting:** PythonAnywhere for the backend and StableHost for hosting the HTML, CSS, and MySQL files.
 
 ## Setup and Installation
 
@@ -35,17 +35,18 @@ The application is built to be responsive, ensuring a seamless experience across
 ### Frontend Setup
 
 - The frontend files (HTML, CSS, JavaScript) should be placed in the designated static directory of your Flask application.
+- Alternatively, you can host these files through a web host like StableHost.
 
 ### Running the Application
 
-- Start the Flask server by running `flask run` from the command line within your project directory.
+- Start the Flask server by executing `flask run` from the command line within your project directory.
 - Access the web application via the provided local URL or configure a domain if hosted.
 
 ## Usage
 
 ### Selecting Meals
 
-- Use the dropdown menu for each day to select a meal.
+- Utilise the dropdown menu for each day to select a meal.
 - The dropdown menus are populated with meal options from the database.
 
 ### Generating a Shopping List
@@ -55,16 +56,15 @@ The application is built to be responsive, ensuring a seamless experience across
 
 ## Customisation
 
-### Colors
+### Colours
 
-- The application uses a color palette defined in the CSS file. You can modify the HEX codes to match your desired theme.
+- The application uses a colour palette defined in the CSS file. You can modify the HEX codes to match your desired theme.
 
 ### Meals Database
 
 - Add or remove meals and their ingredients in the database to update the dropdown options.
 
-
-# api 
+# API Documentation
 
 ## Overview
 
@@ -76,14 +76,14 @@ The Flask Recipes API provides functionalities to manage and retrieve recipes an
 
 ## Endpoints
 
-### 1. Get All Recipes
+### Get All Recipes
 
 - **Endpoint:** `/recipes`
 - **Method:** GET
 - **Description:** Retrieves a list of all recipes.
 - **Response:** JSON array of recipe names.
 
-### 2. Add a Recipe
+### Add a Recipe
 
 - **Endpoint:** `/recipe`
 - **Method:** POST
@@ -91,21 +91,18 @@ The Flask Recipes API provides functionalities to manage and retrieve recipes an
 - **Request:** JSON with `name` and optional `cuisine`.
 - **Response:** Success message and status `201 Created`.
 
-### 3. Get a Specific Recipe
+### Get a Specific Recipe
 
 - **Endpoint:** `/recipes/<int:id>`
 - **Method:** GET
 - **Description:** Retrieves details of a specific recipe, including a list of associated ingredients.
 - **Response:** JSON object with recipe name and ingredients list.
 
-## Notes
+## Security
 
-- Authentication is not required.
-- Ensure security measures, as database credentials are currently included in the code.
+- Database credentials are stored in a config file within a .gitignore folder.
 
-
-
-# Updating recipes directly
+# Updating Recipes Directly
 
 ## Checking recipes
 
