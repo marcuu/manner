@@ -36,49 +36,71 @@ function populateAllMealDropdowns() {
   })
   .catch(error => {
     console.error('Error fetching meals:', error);
+
+    // Create and style the error message element
+    const errorMessage = document.createElement('div');
+    errorMessage.classList.add('error-message'); // Add a CSS class for styling
+    errorMessage.textContent = 'An error occurred while fetching meals. Please try again later.';
+
+    // Insert the error message at the top of the page
+    const firstElement = document.body.firstChild;
+    if (firstElement) {
+      document.body.insertBefore(errorMessage, firstElement);
+    } else {
+      document.body.appendChild(errorMessage);
+    }
   });
 }
+function generateShoppingList() {
+  const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  let shoppingList = new Map(); // Using a map to avoid duplicate ingredients
 
-  
-  function generateShoppingList() {
-    const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-    let shoppingList = new Map(); // Using a map to avoid duplicate ingredients
-  
-    Promise.all(daysOfWeek.map(day => {
-      const mealName = document.getElementById(day).value;
-      if (mealName) { // Proceed only if a meal is selected
-        return fetch(`https://marcuu.pythonanywhere.com//recipes/${mealName}`, {
-          headers: {
-            'Authorization': 'Token d7d9b014bc89742181d8dfd65270e6386e6f7833'
+  Promise.all(daysOfWeek.map(day => {
+    const mealName = document.getElementById(day).value;
+    if (mealName) { // Proceed only if a meal is selected
+      return fetch(`https://marcuu.pythonanywhere.com/recipes/${mealName}`, {
+        headers: {
+          'Authorization': 'Token d7d9b014bc89742181d8dfd65270e6386e6f7833'
+        }
+      })
+      .then(response => {
+        // Check for network errors (status codes outside 200-299 range)
+        if (!response.ok) {
+          throw new Error(`Network response error: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        data.ingredients.forEach(ingredient => {
+          // If the ingredient is already in the map, increment the count
+          if (shoppingList.has(ingredient)) {
+            shoppingList.set(ingredient, shoppingList.get(ingredient) + 1);
+          } else {
+            shoppingList.set(ingredient, 1);
           }
-        })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then(data => {
-          data.ingredients.forEach(ingredient => {
-            // If the ingredient is already in the map, increment the count
-            if (shoppingList.has(ingredient)) {
-              shoppingList.set(ingredient, shoppingList.get(ingredient) + 1);
-            } else {
-              shoppingList.set(ingredient, 1);
-            }
-          });
-        })
-        .catch(error => {
-          console.error('Error fetching ingredients:', error);
         });
-      } else {
-        return Promise.resolve(); // Resolve to nothing if no meal is selected
-      }
-    })).then(() => {
-      // Now that all ingredients have been gathered, display the shopping list
-      displayShoppingList(Array.from(shoppingList));
-    });
-  }
+      })
+      .catch(error => {
+        console.error('Error fetching ingredients:', error);
+        // Display a user-friendly error message indicating the specific issue
+        const errorMessage = document.createElement('div');
+        errorMessage.classList.add('error-message');
+        if (error.message.includes('Network')) {
+          errorMessage.textContent = 'There was a network error while fetching ingredients. Please check your internet connection and try again.';
+        } else {
+          errorMessage.textContent = 'An error occurred while fetching ingredients. Please try again later.';
+        }
+        document.body.insertBefore(errorMessage, document.body.firstChild);
+      });
+    } else {
+      return Promise.resolve(); // Resolve to nothing if no meal is selected
+    }
+  }))
+  .then(() => {
+    // Now that all ingredients have been gathered, display the shopping list
+    displayShoppingList(Array.from(shoppingList));
+  });
+}
   
   function displayShoppingList(ingredientsList) {
     const shoppingListElement = document.getElementById('shopping-list');
@@ -94,5 +116,3 @@ function populateAllMealDropdowns() {
   
     shoppingListElement.appendChild(list);
   }
-
-  
