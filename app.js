@@ -116,7 +116,14 @@ function generateShoppingList() {
     displayShoppingList(Array.from(shoppingList));
   });
 }
-  
+
+function scrollToShoppingList() {
+  const shoppingListElement = document.getElementById('shopping-list');
+  if (shoppingListElement) {
+      shoppingListElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
   function displayShoppingList(ingredientsList) {
     const shoppingListElement = document.getElementById('shopping-list');
     shoppingListElement.innerHTML = '<h2>Shopping List</h2>';
@@ -130,4 +137,6 @@ function generateShoppingList() {
     });
   
     shoppingListElement.appendChild(list);
+
+    scrollToShoppingList();
   }
