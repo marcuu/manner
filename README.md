@@ -105,7 +105,7 @@ The Flask Recipes API provides functionalities to manage and retrieve recipes an
 
 
 
-# Updating recipes directly in pythonanywhere
+# Updating recipes directly
 You can check the current list of recipes and their corresponding ID directly in pythonanywhere's MySQL console
 ```
 SELECT id, name FROM recipes ORDER BY id;
