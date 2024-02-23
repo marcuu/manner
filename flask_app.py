@@ -4,7 +4,7 @@ from flask_cors import CORS
 from config import SQLALCHEMY_DATABASE_URI
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/api/*": {"origins": "https://marcusburgess.co.uk"}})
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
