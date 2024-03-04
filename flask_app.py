@@ -20,7 +20,6 @@ class Ingredients(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'))
-    # ... add other fields as necessary ...
 
 @app.route('/recipes', methods=['GET'])
 def get_recipes():
@@ -62,4 +61,4 @@ def create_tables():
         db.create_all()
 
 if __name__ == '__main__':
-    create_tables()  # Create tables if they don't exist.
+    create_tables() 
