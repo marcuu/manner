@@ -2,7 +2,7 @@
 
 ## Overview
 
-Manner is a web application designed to simplify the process of planning meals for the week. It enables users to select meals from a dropdown menu for each day of the week and automatically generates a shopping list based on the selected meals.
+Manner is a web application designed to simplify the process of planning meals for the week. It enables users to select meals from a dropdown menu for each day of the week and automatically generates a shopping list based on the selected meals. 
 
 ## Features
 
@@ -85,11 +85,26 @@ The Flask Recipes API provides functionalities to manage and retrieve recipes an
 
 ### Add a Recipe
 
-- **Endpoint:** `/recipe`
+- **Endpoint:** `/add_recipe`
 - **Method:** POST
 - **Description:** Adds a new recipe to the database.
 - **Request:** JSON with `name` and optional `cuisine`.
 - **Response:** Success message and status `201 Created`.
+- **Example:**
+--header 'Authorization: Token _token here_' \
+--header 'Content-Type: application/json' \
+```
+{
+    "MealName": "Sample Recipe",
+    "cuisine": "null",
+    "ingredients": [
+        "Ingredient 1",
+        "Ingredient 2",
+        "Ingredient 3"
+    ]
+}
+```
+
 
 ### Get a Specific Recipe
 
@@ -98,15 +113,26 @@ The Flask Recipes API provides functionalities to manage and retrieve recipes an
 - **Description:** Retrieves details of a specific recipe, including a list of associated ingredients.
 - **Response:** JSON object with recipe name and ingredients list.
 
+
+### Get all recipes and ingredients
+
+- **Endpoint:** `/recipes_with_ingredients
+- **Method:** GET
+- **Description:** Retrieves details of all recipes, and their associated ingredients.
+- **Response:** JSON object with recipe names and ingredients lists.
+  
 ## Security
 
-- Database credentials are stored in a config file within a .gitignore folder.
+- Database credentials are stored in a config file
+- The API requires an authorization header
 
-# Updating Recipes Directly
+# Updating Recipes Using SQL
+
+It's recommended to use the APIs to view and add recipes, however it is possible to directly update them using pythonanywhere's MySQL console. This is particularly relevant if you need to delete a recipe which is currently not supported via API. 
 
 ## Checking recipes
 
-You can check the current list of recipes and their corresponding ID directly in pythonanywhere's MySQL console
+You can check the current list of recipes and their corresponding ID 
 ```
 SELECT id, name FROM recipes ORDER BY id;
 ```
