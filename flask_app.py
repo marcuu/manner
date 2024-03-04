@@ -24,7 +24,7 @@ class Ingredients(db.Model):
 
 @app.route('/recipes', methods=['GET'])
 def get_recipes():
-    recipes = Recipes.query.all()
+    recipes = Recipes.query.order_by(Recipes.MealName).all()
     return jsonify([recipe.MealName for recipe in recipes])
 
 @app.route('/add_recipe', methods=['POST'])
