@@ -56,13 +56,7 @@ async function populateAllMealDropdowns() {
       errorMessage.classList.add('error-message');
       errorMessage.textContent = 'An error occurred while fetching meals. Please try refreshing the page.';
 
-      // Insert the error message at the top of the page
-      const firstElement = document.body.firstChild;
-      if (firstElement) {
-        document.body.insertBefore(errorMessage, firstElement);
-      } else {
-        document.body.appendChild(errorMessage);
-      }
+
     }
   }
 }
@@ -124,19 +118,45 @@ function scrollToShoppingList() {
   }
 }
 
-  function displayShoppingList(ingredientsList) {
-    const shoppingListElement = document.getElementById('shopping-list');
-    shoppingListElement.innerHTML = '<h2>Shopping List</h2>';
-  
-    // Create a list for the ingredients
-    const list = document.createElement('ul');
-    ingredientsList.forEach(ingredient => {
-      const item = document.createElement('li');
-      item.textContent = `${ingredient[1]}x ${ingredient[0]}`; // e.g., 2x Tomato
-      list.appendChild(item);
-    });
-  
-    shoppingListElement.appendChild(list);
+
+function displayShoppingList(ingredientsList) {
+  const shoppingListElement = document.getElementById('shopping-list');
+  shoppingListElement.innerHTML = '<h2>Shopping List</h2>';
+
+  // Create a list for the ingredients
+  const list = document.createElement('ul');
+  let shoppingListText = 'Shopping List:\n'; // Initialize the shopping list text
+  ingredientsList.forEach(ingredient => {
+    const item = document.createElement('li');
+    item.textContent = `${ingredient[1]}x ${ingredient[0]}`; // e.g., 2x Tomato
+    list.appendChild(item);
+
+    // Add each item to the shoppingListText
+    shoppingListText += `${ingredient[1]}x ${ingredient[0]}\n`;
+  });
+
+  shoppingListElement.appendChild(list);
+
+  // Share button logic
+const shareButton = document.getElementById('shareButton');
+if (navigator.share && /Mobi/.test(navigator.userAgent)) { // Check if Web Share API is supported and if on a mobile device
+  shareButton.style.display = 'inline-block'; // Show the share button
+
+  shareButton.addEventListener('click', async () => {
+    try {
+      await navigator.share({
+        title: 'My Shopping List',
+        text: shoppingListText // Share the shopping list text
+      });
+      console.log('Shopping list shared successfully');
+    } catch (err) {
+      console.error('Error sharing shopping list', err);
+    }
+  });
+} else {
+  shareButton.style.display = 'none'; // Hide the share button if not on a mobile device or if Web Share API is not supported
+}
+
 
     scrollToShoppingList();
-  }
+}
