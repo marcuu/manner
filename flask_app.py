@@ -27,7 +27,7 @@ def get_recipes():
     recipes = Recipes.query.all()
     return jsonify([recipe.MealName for recipe in recipes])
 
-@app.route('/recipe', methods=['POST'])
+@app.route('/add_recipe', methods=['POST'])
 def add_recipe():
     data = request.json
     new_recipe = Recipes(MealName=data['MealName'], cuisine=data.get('cuisine', 'Unknown'))
@@ -44,6 +44,18 @@ def get_recipe(MealName):
         return jsonify({"MealName": recipe.MealName, "ingredients": ingredient_list})
     else:
         return jsonify({"message": "Recipe not found"}), 404
+
+@app.route('/recipes_with_ingredients', methods=['GET'])
+def get_recipes_with_ingredients():
+    recipes = db.session.query(Recipes, Ingredients).join(Ingredients, Recipes.id == Ingredients.recipe_id).all()
+    recipes_dict = {}
+
+    for recipe, ingredient in recipes:
+        if recipe.MealName not in recipes_dict:
+            recipes_dict[recipe.MealName] = {'cuisine': recipe.cuisine, 'ingredients': []}
+        recipes_dict[recipe.MealName]['ingredients'].append(ingredient.name)
+
+    return jsonify(recipes_dict)
 
 def create_tables():
     with app.app_context():
