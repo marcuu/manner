@@ -4,7 +4,7 @@ from flask_cors import CORS
 from config import SQLALCHEMY_DATABASE_URI
 
 app = Flask(__name__)
-CORS(app, resources={r"/recipes/*": {"origins": "https://marcusburgess.co.uk"}})
+CORS(app, origins=["https://marcusburgess.co.uk"])
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -15,24 +15,32 @@ class Recipes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     MealName = db.Column(db.String(50))
     cuisine = db.Column(db.String(50))
+    mealType = db.Column(db.String(50))
 
 class Ingredients(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'))
+    # ... add other fields as necessary ...
 
 @app.route('/recipes', methods=['GET'])
 def get_recipes():
-    recipes = Recipes.query.order_by(Recipes.MealName).all()
-    return jsonify([recipe.MealName for recipe in recipes])
+    recipes = Recipes.query.all()
+    return jsonify([{ 'MealName': recipe.MealName, 'mealType': recipe.mealType } for recipe in recipes])
 
 @app.route('/add_recipe', methods=['POST'])
 def add_recipe():
     data = request.json
-    new_recipe = Recipes(MealName=data['MealName'], cuisine=data.get('cuisine', 'Unknown'))
+    new_recipe = Recipes(MealName=data['MealName'], cuisine=data.get('cuisine', 'Unknown'), mealType=data.get('mealType', 'Unknown'))
     db.session.add(new_recipe)
+    db.session.flush()  # This will assign an ID to new_recipe without committing the transaction
+
+    for ingredient_name in data['ingredients']:
+        new_ingredient = Ingredients(name=ingredient_name, recipe_id=new_recipe.id)
+        db.session.add(new_ingredient)
+
     db.session.commit()
-    return jsonify({"message": "Recipe added successfully!"}), 201
+    return jsonify({"message": "Recipe and ingredients added successfully!"}), 201
 
 @app.route('/recipes/<string:MealName>', methods=['GET'])
 def get_recipe(MealName):
@@ -55,10 +63,9 @@ def get_recipes_with_ingredients():
         recipes_dict[recipe.MealName]['ingredients'].append(ingredient.name)
 
     return jsonify(recipes_dict)
-
 def create_tables():
     with app.app_context():
         db.create_all()
 
 if __name__ == '__main__':
-    create_tables() 
+    create_tables()  # Create tables if they don't exist.

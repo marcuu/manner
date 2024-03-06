@@ -102,12 +102,40 @@ button:hover {
   top: 0;
 }
 
+details {
+  list-style: none;
+  padding-bottom: 20px;
+}
+
+details > summary {
+  list-style: none;
+  padding: 15px;
+}
+
+details > summary::before {
+  content: '+';
+  margin-right: 8px;
+  font-size: 20px;
+}
+
+details[open] > summary::before {
+  content: '−'; /* Change to a minus symbol when details are open */
+}
+
+#lunch-planner {
+  padding: 20px;
+}
+
+#lunch-planner div {
+  margin-bottom: 15px;
+}
+
 </style>
 </head>
 <body>
   <a href="#mainContent" class="skip-link">Skip to Content</a>
   <div id="meal-planner">
-    <img src="/mannerheader.png" alt="Manner Header" style="width: 100%; height: auto;">
+    <h1><img src="/mannerheader.png" alt="Manner Header" style="width: 100%; height: auto;"></h1>
     <p>Meal planning is annoying. This makes it easy.</p>
     <div id="mainContent">
     <div id="days">
@@ -153,6 +181,48 @@ button:hover {
         </select>
       </div>
     </div>
+  
+    <details>
+      <summary>Add Lunches</summary>
+      <div id="lunch-planner">
+      <div class="lunch-selection">
+        <label for="lunch-monday">Monday</label>
+        <select id="lunch-monday" aria-label="Select lunch for Monday">
+        </select>
+      </div>
+      <div class="lunch-selection">
+        <label for="lunch-tuesday">Tuesday</label>
+        <select id="lunch-tuesday" aria-label="Select lunch for tuesday">
+        </select>
+      </div> 
+      <div class="lunch-selection">
+        <label for="lunch-wednesday">Wednesday</label>
+        <select id="lunch-wednesday" aria-label="Select lunch for wednesday">
+        </select>
+      </div> 
+      <div class="lunch-selection">
+        <label for="lunch-thursday">Thursday</label>
+        <select id="lunch-thursday" aria-label="Select lunch for thursday">
+        </select>
+      </div> 
+      <div class="lunch-selection">
+        <label for="lunch-friday">Friday</label>
+        <select id="lunch-friday" aria-label="Select lunch for friday">
+        </select>
+      </div> 
+      <div class="lunch-selection">
+        <label for="lunch-saturday">Saturday</label>
+        <select id="lunch-saturday" aria-label="Select lunch for saturday">
+        </select>
+      </div> 
+      <div class="lunch-selection">
+        <label for="lunch-sunday">Sunday</label>
+        <select id="lunch-sunday" aria-label="Select lunch for sunday">
+        </select>
+      </div>
+    </div>
+    </details>
+    
 
     <button id="plan-meals" class=".btn">Plan My Meals</button>
   </div>

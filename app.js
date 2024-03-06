@@ -1,11 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
   populateAllMealDropdowns();
+  populateLunchDropdowns();
 
   document.getElementById('plan-meals').addEventListener('click', generateShoppingList);
 });
 
 async function populateAllMealDropdowns() {
-  const MAX_RETRIES = 3; // Define the maximum number of retry attempts
+  const MAX_RETRIES = 3;
   let retries = 0;
 
   try {
@@ -26,20 +27,19 @@ async function populateAllMealDropdowns() {
     daysOfWeek.forEach(day => {
       const select = document.getElementById(day);
 
-      // Add the default option
       const defaultOption = document.createElement('option');
       defaultOption.textContent = 'Choose a meal';
       defaultOption.value = '';
       defaultOption.disabled = true;
       defaultOption.selected = true;
-      defaultOption.hidden = true; // Hide this option once others are available
+      defaultOption.hidden = true;
       select.appendChild(defaultOption);
 
-      // Populate the dropdown with meal options
-      meals.forEach(meal => {
+      // Filter meals by mealType
+      meals.filter(meal => meal.mealType === 'dinner').forEach(meal => {
         const option = document.createElement('option');
-        option.value = meal;
-        option.textContent = meal;
+        option.value = meal.MealName;
+        option.textContent = meal.MealName;
         select.appendChild(option);
       });
     });
@@ -51,17 +51,70 @@ async function populateAllMealDropdowns() {
     } else {
       console.error('Error fetching meals:', error);
 
-      // Create and style the error message element
       const errorMessage = document.createElement('div');
       errorMessage.classList.add('error-message');
       errorMessage.textContent = 'An error occurred while fetching meals. Please try refreshing the page.';
-
-
+      document.body.insertBefore(errorMessage, document.body.firstChild);
     }
   }
 }
+
+async function populateLunchDropdowns() {
+  const MAX_RETRIES = 3;
+  let retries = 0;
+
+  try {
+    const response = await fetch('https://marcuu.pythonanywhere.com/recipes', {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Token d7d9b014bc89742181d8dfd65270e6386e6f7833'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Network response error: ${response.status}`);
+    }
+
+    const meals = await response.json();
+
+    const daysOfWeek = ['lunch-monday', 'lunch-tuesday', 'lunch-wednesday', 'lunch-thursday', 'lunch-friday', 'lunch-saturday', 'lunch-sunday'];
+    daysOfWeek.forEach(day => {
+      const select = document.getElementById(day);
+
+      const defaultOption = document.createElement('option');
+      defaultOption.textContent = 'Choose a meal';
+      defaultOption.value = '';
+      defaultOption.disabled = true;
+      defaultOption.selected = true;
+      defaultOption.hidden = true;
+      select.appendChild(defaultOption);
+
+      // Filter meals by mealType
+      meals.filter(meal => meal.mealType === 'lunch').forEach(meal => {
+        const option = document.createElement('option');
+        option.value = meal.MealName;
+        option.textContent = meal.MealName;
+        select.appendChild(option);
+      });
+    });
+  } catch (error) {
+    retries++;
+    if (retries < MAX_RETRIES) {
+      console.warn(`Retrying meal dropdown population (attempt ${retries}/${MAX_RETRIES})...`);
+      await populateAllMealDropdowns(); // Retry recursively
+    } else {
+      console.error('Error fetching meals:', error);
+
+      const errorMessage = document.createElement('div');
+      errorMessage.classList.add('error-message');
+      errorMessage.textContent = 'An error occurred while fetching meals. Please try refreshing the page.';
+      document.body.insertBefore(errorMessage, document.body.firstChild);
+    }
+  }
+}
+
 function generateShoppingList() {
-  const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'lunch-monday', 'lunch-tuesday', 'lunch-wednesday', 'lunch-thursday', 'lunch-friday', 'lunch-saturday', 'lunch-sunday'];
   let shoppingList = new Map(); // Using a map to avoid duplicate ingredients
 
   Promise.all(daysOfWeek.map(day => {
