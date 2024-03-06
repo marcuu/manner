@@ -47,7 +47,9 @@ The application is built to be responsive, ensuring a seamless experience across
 ### Selecting Meals
 
 - Utilise the dropdown menu for each day to select a meal.
+- Expand the lunches section to also include lunches.
 - The dropdown menus are populated with meal options from the database.
+- Meals are split by mealType and only included in the relevant meal section.
 
 ### Generating a Shopping List
 
@@ -80,8 +82,8 @@ The Flask Recipes API provides functionalities to manage and retrieve recipes an
 
 - **Endpoint:** `/recipes`
 - **Method:** GET
-- **Description:** Retrieves a list of all recipes.
-- **Response:** JSON array of recipe names.
+- **Description:** Retrieves a list of all recipes and their meal type.
+- **Response:** JSON array of recipe names and mealTypes.
 
 ### Add a Recipe
 
@@ -97,6 +99,7 @@ The Flask Recipes API provides functionalities to manage and retrieve recipes an
 {
     "MealName": "Sample Recipe",
     "cuisine": "null",
+    "mealType": "lunch",
     "ingredients": [
         "Ingredient 1",
         "Ingredient 2",
