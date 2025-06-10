@@ -160,6 +160,15 @@ function generateShoppingList() {
   }))
   .then(() => {
     // Now that all ingredients have been gathered, display the shopping list
+    document.querySelectorAll('#essentials input[type="checkbox"]:checked').forEach(cb => {
+      const item = cb.value;
+      if (shoppingList.has(item)) {
+        shoppingList.set(item, shoppingList.get(item) + 1);
+      } else {
+        shoppingList.set(item, 1);
+      }
+    });
+
     displayShoppingList(Array.from(shoppingList));
   });
 }

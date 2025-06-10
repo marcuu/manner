@@ -55,6 +55,7 @@ The application is built to be responsive, ensuring a seamless experience across
 
 - Once all meals are selected, click the "Plan my meals" button.
 - The application will display a shopping list with all the ingredients required for the selected meals.
+- Optionally tick items in the **Add Essentials** section (e.g. Fabric Conditioner, Bin Bags) to include them in the list.
 
 ## Customisation
 
