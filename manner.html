@@ -130,6 +130,15 @@ details[open] > summary::before {
   margin-bottom: 15px;
 }
 
+#essentials {
+  padding: 20px;
+}
+
+#essentials label {
+  display: block;
+  margin-bottom: 8px;
+}
+
 </style>
 </head>
 <body>
@@ -220,11 +229,20 @@ details[open] > summary::before {
         <select id="lunch-sunday" aria-label="Select lunch for sunday">
         </select>
       </div>
-    </div>
-    </details>
-    
+      </div>
+      </details>
 
-    <button id="plan-meals" class=".btn">Plan My Meals</button>
+      <details>
+        <summary>Add Essentials</summary>
+        <div id="essentials">
+          <label><input type="checkbox" value="Fabric Conditioner"> Fabric Conditioner</label><br>
+          <label><input type="checkbox" value="Bin Bags"> Bin Bags</label><br>
+          <label><input type="checkbox" value="Toilet Roll"> Toilet Roll</label><br>
+          <label><input type="checkbox" value="Washing Up Liquid"> Washing Up Liquid</label>
+        </div>
+      </details>
+
+      <button id="plan-meals" class=".btn">Plan My Meals</button>
   </div>
 
   <div id="errorMessages" style="color: red; margin: 10px 0;"></div>
