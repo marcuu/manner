@@ -68,4 +68,6 @@ def create_tables():
         db.create_all()
 
 if __name__ == '__main__':
-    create_tables()  # Create tables if they don't exist.
+    # Create tables if they don't already exist and start the application
+    create_tables()
+    app.run(debug=True)

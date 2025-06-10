@@ -47,7 +47,7 @@ async function populateAllMealDropdowns() {
     retries++;
     if (retries < MAX_RETRIES) {
       console.warn(`Retrying meal dropdown population (attempt ${retries}/${MAX_RETRIES})...`);
-      await populateAllMealDropdowns(); // Retry recursively
+      await populateLunchDropdowns(); // Retry recursively
     } else {
       console.error('Error fetching meals:', error);
 
