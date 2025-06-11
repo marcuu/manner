@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
   populateLunchDropdowns();
 
   document.getElementById('plan-meals').addEventListener('click', generateShoppingList);
+  document.getElementById('suggest-meals').addEventListener('click', suggestMeals);
 });
 
 async function populateAllMealDropdowns() {
@@ -221,4 +222,47 @@ if (navigator.share && /Mobi/.test(navigator.userAgent)) { // Check if Web Share
 
 
     scrollToShoppingList();
+}
+
+async function suggestMeals() {
+  try {
+    const response = await fetch('https://marcuu.pythonanywhere.com/recipes', {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Token d7d9b014bc89742181d8dfd65270e6386e6f7833'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Network response error: ${response.status}`);
+    }
+
+    const meals = await response.json();
+
+    const dinnerMeals = meals.filter(meal => meal.mealType === 'dinner');
+    const lunchMeals = meals.filter(meal => meal.mealType === 'lunch');
+
+    const dinnerDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    const lunchDays = ['lunch-monday', 'lunch-tuesday', 'lunch-wednesday', 'lunch-thursday', 'lunch-friday', 'lunch-saturday', 'lunch-sunday'];
+
+    fillRandomSelections(dinnerDays, dinnerMeals);
+    fillRandomSelections(lunchDays, lunchMeals);
+
+  } catch (error) {
+    console.error('Error suggesting meals:', error);
+  }
+}
+
+function fillRandomSelections(days, meals) {
+  const available = [...meals];
+  days.forEach(day => {
+    const select = document.getElementById(day);
+    if (!select || available.length === 0) return;
+    const index = Math.floor(Math.random() * available.length);
+    const meal = available.splice(index, 1)[0];
+    const option = Array.from(select.options).find(opt => opt.value === meal.MealName);
+    if (option) {
+      select.value = meal.MealName;
+    }
+  });
 }
