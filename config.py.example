@@ -1,0 +1,4 @@
+# Database Configuration
+# Copy this file to config.py and update with your actual credentials
+
+SQLALCHEMY_DATABASE_URI = 'mysql://username:password@host/database_name'

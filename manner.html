@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manner</title>
+<style>
+  body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 20px;
+  color: #333;
+}
+
+#meal-planner {
+  background-color: #ffffff;
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  border: none;
+  border-radius: 8px;
+}
+
+#meal-planner h1 {
+  color: #333333;
+  text-align: center;
+}
+
+#meal-planner p {
+  text-align: center;
+  color: #333333;
+}
+
+#days div {
+  margin-bottom: 15px;
+}
+
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #555555;
+  border-radius: 4px;
+  background-color: #ffffff;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+button {
+  width: 100%;
+  background-color: #11549b;
+  color: white;
+  padding: 15px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #003d82;
+}
+
+#shopping-list {
+  background-color: #ffffff;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 8px;
+  border: none;
+}
+
+#shopping-list h2 {
+  color: #333333;
+  text-align: center;
+}
+
+#shopping-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+#shopping-list li {
+  background-color: #e7e7e7;
+  margin-bottom: 5px;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #000;
+  color: white;
+  padding: 8px;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+details {
+  list-style: none;
+  padding-bottom: 20px;
+}
+
+details > summary {
+  list-style: none;
+  padding: 15px;
+}
+
+details > summary::before {
+  content: '+';
+  margin-right: 8px;
+  font-size: 20px;
+}
+
+details[open] > summary::before {
+  content: '−'; /* Change to a minus symbol when details are open */
+}
+
+#lunch-planner {
+  padding: 20px;
+}
+
+#lunch-planner div {
+  margin-bottom: 15px;
+}
+
+#essentials {
+  padding: 20px;
+}
+
+#essentials label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+</style>
+</head>
+<body>
+  <a href="#mainContent" class="skip-link">Skip to Content</a>
+  <div id="meal-planner">
+    <h1><img src="/mannerheader.png" alt="Manner Header" style="width: 100%; height: auto;"></h1>
+    <p>Meal planning is annoying. This makes it easy.</p>
+    <div id="mainContent">
+    <div id="days">
+      <div class="day-container">
+        <label for="monday">Monday</label>
+        <select id="monday" aria-label="Select meal for Monday">  
+        </select>
+      </div>
+
+      <div class="day-container">
+        <label for="tuesday">Tuesday</label>
+        <select id="tuesday" aria-label="Select meal for Tuesday">
+        </select>
+      </div>
+      
+      <div class="day-container">
+        <label for="wednesday">Wednesday</label>
+        <select id="wednesday" aria-label="Select meal for Wednesday">
+        </select>
+      </div>
+
+      <div class="day-container">
+        <label for="thursday">Thursday</label>
+        <select id="thursday" aria-label="Select meal for Thursday">
+        </select>
+      </div>
+
+      <div class="day-container">
+        <label for="friday">Friday</label>
+        <select id="friday" aria-label="Select meal for Friday">
+        </select>
+      </div>
+
+      <div class="day-container">
+        <label for="saturday">Saturday</label>
+        <select id="saturday" aria-label="Select meal for Saturday">
+        </select>
+      </div>
+
+      <div class="day-container">
+        <label for="sunday">Sunday</label>
+        <select id="sunday" aria-label="Select meal for Sunday">
+        </select>
+      </div>
+    </div>
+  
+    <details>
+      <summary>Add Lunches</summary>
+      <div id="lunch-planner">
+      <div class="lunch-selection">
+        <label for="lunch-monday">Monday</label>
+        <select id="lunch-monday" aria-label="Select lunch for Monday">
+        </select>
+      </div>
+      <div class="lunch-selection">
+        <label for="lunch-tuesday">Tuesday</label>
+        <select id="lunch-tuesday" aria-label="Select lunch for tuesday">
+        </select>
+      </div> 
+      <div class="lunch-selection">
+        <label for="lunch-wednesday">Wednesday</label>
+        <select id="lunch-wednesday" aria-label="Select lunch for wednesday">
+        </select>
+      </div> 
+      <div class="lunch-selection">
+        <label for="lunch-thursday">Thursday</label>
+        <select id="lunch-thursday" aria-label="Select lunch for thursday">
+        </select>
+      </div> 
+      <div class="lunch-selection">
+        <label for="lunch-friday">Friday</label>
+        <select id="lunch-friday" aria-label="Select lunch for friday">
+        </select>
+      </div> 
+      <div class="lunch-selection">
+        <label for="lunch-saturday">Saturday</label>
+        <select id="lunch-saturday" aria-label="Select lunch for saturday">
+        </select>
+      </div> 
+      <div class="lunch-selection">
+        <label for="lunch-sunday">Sunday</label>
+        <select id="lunch-sunday" aria-label="Select lunch for sunday">
+        </select>
+      </div>
+      </div>
+      </details>
+
+      <details>
+        <summary>Add Essentials</summary>
+        <div id="essentials">
+          <label><input type="checkbox" value="Fabric Conditioner"> Fabric Conditioner</label><br>
+          <label><input type="checkbox" value="Bin Bags"> Bin Bags</label><br>
+          <label><input type="checkbox" value="Toilet Roll"> Toilet Roll</label><br>
+          <label><input type="checkbox" value="Washing Up Liquid"> Washing Up Liquid</label>
+        </div>
+      </details>
+
+      <button id="suggest-meals" class=".btn">Suggest Meals</button>
+      <button id="plan-meals" class=".btn">Plan My Meals</button>
+  </div>
+
+  <div id="errorMessages" style="color: red; margin: 10px 0;"></div>
+  <div id="shopping-list">
+  </div>
+
+  <button id="shareButton" class=".btn-secondary" style="display: none;">Share</button>
+
+<script src="app.js"></script>
+</div>
+</body>
+</html>
