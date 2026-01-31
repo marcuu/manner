@@ -32,6 +32,15 @@ def get_recipes():
 @app.route('/add_recipe', methods=['POST'])
 def add_recipe():
     data = request.json
+
+    # Validate required fields
+    if not data or not data.get('MealName') or not data.get('ingredients'):
+        return jsonify({"error": "MealName and ingredients are required"}), 400
+
+    # Validate ingredients is a non-empty list
+    if not isinstance(data['ingredients'], list) or len(data['ingredients']) == 0:
+        return jsonify({"error": "ingredients must be a non-empty array"}), 400
+
     new_recipe = Recipes(MealName=data['MealName'], cuisine=data.get('cuisine', 'Unknown'), mealType=data.get('mealType', 'Unknown'))
     db.session.add(new_recipe)
     db.session.flush()  # This will assign an ID to new_recipe without committing the transaction
