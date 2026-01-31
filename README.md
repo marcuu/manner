@@ -57,6 +57,8 @@ A simple web-based meal planner that helps you organize weekly meals and generat
 
 ## API Endpoints
 
+All endpoints are public (no authentication required):
+
 - `GET /recipes` - List all recipes
 - `GET /recipes/<MealName>` - Get specific recipe with ingredients
 - `GET /recipes_with_ingredients` - Get all recipes with their ingredients

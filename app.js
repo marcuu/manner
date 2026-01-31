@@ -12,10 +12,7 @@ async function populateAllMealDropdowns() {
 
   try {
     const response = await fetch('https://marcuu.pythonanywhere.com/recipes', {
-      method: 'GET',
-      headers: {
-        'Authorization': 'Token d7d9b014bc89742181d8dfd65270e6386e6f7833'
-      }
+      method: 'GET'
     });
 
     if (!response.ok) {
@@ -66,10 +63,7 @@ async function populateLunchDropdowns() {
 
   try {
     const response = await fetch('https://marcuu.pythonanywhere.com/recipes', {
-      method: 'GET',
-      headers: {
-        'Authorization': 'Token d7d9b014bc89742181d8dfd65270e6386e6f7833'
-      }
+      method: 'GET'
     });
 
     if (!response.ok) {
@@ -121,11 +115,7 @@ function generateShoppingList() {
   Promise.all(daysOfWeek.map(day => {
     const mealName = document.getElementById(day).value;
     if (mealName) { // Proceed only if a meal is selected
-      return fetch(`https://marcuu.pythonanywhere.com/recipes/${mealName}`, {
-        headers: {
-          'Authorization': 'Token d7d9b014bc89742181d8dfd65270e6386e6f7833'
-        }
-      })
+      return fetch(`https://marcuu.pythonanywhere.com/recipes/${mealName}`)
       .then(response => {
         // Check for network errors (status codes outside 200-299 range)
         if (!response.ok) {
@@ -227,10 +217,7 @@ if (navigator.share && /Mobi/.test(navigator.userAgent)) { // Check if Web Share
 async function suggestMeals() {
   try {
     const response = await fetch('https://marcuu.pythonanywhere.com/recipes', {
-      method: 'GET',
-      headers: {
-        'Authorization': 'Token d7d9b014bc89742181d8dfd65270e6386e6f7833'
-      }
+      method: 'GET'
     });
 
     if (!response.ok) {

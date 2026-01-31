@@ -68,9 +68,9 @@ Ingredients
 3. **Database changes** - Add models or migrations (manual for now)
 
 ### API Integration
-- Frontend uses `fetch()` with token authentication
+- Frontend uses `fetch()` for public API access
 - Base URL: `https://marcuu.pythonanywhere.com`
-- Token in Authorization header: `Token d7d9b014bc89742181d8dfd65270e6386e6f7833`
+- No authentication required (public read-only recipe API)
 
 ### Testing
 - **Local**: Run `python flask_app.py` and open `manner.html`
@@ -115,8 +115,8 @@ Ingredients
 
 ⚠️ **Security:**
 - `config.py` contains database credentials - NEVER commit
-- API token in `app.js` should be environment variable in production
-- Consider adding request rate limiting
+- Recipe API is public (read-only, non-sensitive data)
+- Consider adding request rate limiting for production
 
 ⚠️ **Dependencies:**
 - Frontend has no build step - plain HTML/CSS/JS
