@@ -57,19 +57,28 @@ A simple web-based meal planner that helps you organize weekly meals and generat
 
 ## API Endpoints
 
-All endpoints are public (no authentication required):
-
+**Public (no auth required):**
 - `GET /recipes` - List all recipes
 - `GET /recipes/<MealName>` - Get specific recipe with ingredients
 - `GET /recipes_with_ingredients` - Get all recipes with their ingredients
+
+**Authenticated (requires Bearer token):**
 - `POST /add_recipe` - Add new recipe with ingredients
+  - Requires `Authorization: Bearer <MANNER_API_TOKEN>` header
+  - Validates MealName and ingredients fields
 
 ## Configuration
 
-The app expects a MySQL database connection. Update `config.py` with:
-```python
-SQLALCHEMY_DATABASE_URI = 'mysql://username:password@host/database'
-```
+1. **Database:** Create `config.py` from the template:
+   ```python
+   SQLALCHEMY_DATABASE_URI = 'mysql://username:password@host/database'
+   ```
+
+2. **API Token:** Set environment variable for recipe creation:
+   ```bash
+   export MANNER_API_TOKEN="your-secret-token-here"
+   ```
+   This token is required for POST /add_recipe endpoint only. GET endpoints remain public.
 
 ## Development
 

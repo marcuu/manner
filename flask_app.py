@@ -1,7 +1,11 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from sqlalchemy import JSON
 from config import SQLALCHEMY_DATABASE_URI
+import os
+import hmac
+import hashlib
 
 app = Flask(__name__)
 CORS(app)
@@ -31,6 +35,20 @@ def get_recipes():
 
 @app.route('/add_recipe', methods=['POST'])
 def add_recipe():
+    # Check authentication
+    auth_header = request.headers.get('Authorization')
+    api_token = os.environ.get('MANNER_API_TOKEN', '')
+
+    if not api_token:
+        return jsonify({"error": "Server misconfigured - no API token set"}), 500
+
+    if not auth_header or not auth_header.startswith('Bearer '):
+        return jsonify({"error": "Missing or invalid Authorization header"}), 401
+
+    provided_token = auth_header.replace('Bearer ', '')
+    if not hmac.compare_digest(provided_token, api_token):
+        return jsonify({"error": "Invalid API token"}), 401
+
     data = request.json
 
     # Validate required fields

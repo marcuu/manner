@@ -1,110 +1,68 @@
 document.addEventListener('DOMContentLoaded', function() {
-  populateAllMealDropdowns();
-  populateLunchDropdowns();
+  populateMealDropdowns();
 
   document.getElementById('plan-meals').addEventListener('click', generateShoppingList);
   document.getElementById('suggest-meals').addEventListener('click', suggestMeals);
 });
 
-async function populateAllMealDropdowns() {
-  const MAX_RETRIES = 3;
-  let retries = 0;
-
-  try {
-    const response = await fetch('https://marcuu.pythonanywhere.com/recipes', {
-      method: 'GET'
-    });
-
-    if (!response.ok) {
-      throw new Error(`Network response error: ${response.status}`);
-    }
-
-    const meals = await response.json();
-
-    const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-    daysOfWeek.forEach(day => {
-      const select = document.getElementById(day);
-
-      const defaultOption = document.createElement('option');
-      defaultOption.textContent = 'Choose a meal';
-      defaultOption.value = '';
-      defaultOption.disabled = true;
-      defaultOption.selected = true;
-      defaultOption.hidden = true;
-      select.appendChild(defaultOption);
-
-      // Filter meals by mealType
-      meals.filter(meal => meal.mealType === 'dinner').forEach(meal => {
-        const option = document.createElement('option');
-        option.value = meal.MealName;
-        option.textContent = meal.MealName;
-        select.appendChild(option);
-      });
-    });
-  } catch (error) {
-    retries++;
-    if (retries < MAX_RETRIES) {
-      console.warn(`Retrying meal dropdown population (attempt ${retries}/${MAX_RETRIES})...`);
-      await populateLunchDropdowns(); // Retry recursively
-    } else {
-      console.error('Error fetching meals:', error);
-
-      const errorMessage = document.createElement('div');
-      errorMessage.classList.add('error-message');
-      errorMessage.textContent = 'An error occurred while fetching meals. Please try refreshing the page.';
-      document.body.insertBefore(errorMessage, document.body.firstChild);
+async function fetchWithRetry(url, maxRetries = 3) {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const response = await fetch(url, { method: 'GET' });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      const isLastAttempt = attempt === maxRetries - 1;
+      if (isLastAttempt) {
+        throw error;
+      }
+      // Exponential backoff: 100ms, 200ms, 400ms
+      const delay = 100 * Math.pow(2, attempt);
+      console.warn(`Fetch failed (attempt ${attempt + 1}/${maxRetries}), retrying in ${delay}ms...`);
+      await new Promise(resolve => setTimeout(resolve, delay));
     }
   }
 }
 
-async function populateLunchDropdowns() {
-  const MAX_RETRIES = 3;
-  let retries = 0;
+function populateDropdowns(meals, daysOfWeek, mealType) {
+  daysOfWeek.forEach(day => {
+    const select = document.getElementById(day);
+    if (!select) return;
 
+    const defaultOption = document.createElement('option');
+    defaultOption.textContent = 'Choose a meal';
+    defaultOption.value = '';
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
+    defaultOption.hidden = true;
+    select.appendChild(defaultOption);
+
+    meals.filter(meal => meal.mealType === mealType).forEach(meal => {
+      const option = document.createElement('option');
+      option.value = meal.MealName;
+      option.textContent = meal.MealName;
+      select.appendChild(option);
+    });
+  });
+}
+
+async function populateMealDropdowns() {
   try {
-    const response = await fetch('https://marcuu.pythonanywhere.com/recipes', {
-      method: 'GET'
-    });
+    const meals = await fetchWithRetry('https://marcuu.pythonanywhere.com/recipes');
 
-    if (!response.ok) {
-      throw new Error(`Network response error: ${response.status}`);
-    }
+    const dinnerDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    const lunchDays = ['lunch-monday', 'lunch-tuesday', 'lunch-wednesday', 'lunch-thursday', 'lunch-friday', 'lunch-saturday', 'lunch-sunday'];
 
-    const meals = await response.json();
-
-    const daysOfWeek = ['lunch-monday', 'lunch-tuesday', 'lunch-wednesday', 'lunch-thursday', 'lunch-friday', 'lunch-saturday', 'lunch-sunday'];
-    daysOfWeek.forEach(day => {
-      const select = document.getElementById(day);
-
-      const defaultOption = document.createElement('option');
-      defaultOption.textContent = 'Choose a meal';
-      defaultOption.value = '';
-      defaultOption.disabled = true;
-      defaultOption.selected = true;
-      defaultOption.hidden = true;
-      select.appendChild(defaultOption);
-
-      // Filter meals by mealType
-      meals.filter(meal => meal.mealType === 'lunch').forEach(meal => {
-        const option = document.createElement('option');
-        option.value = meal.MealName;
-        option.textContent = meal.MealName;
-        select.appendChild(option);
-      });
-    });
+    populateDropdowns(meals, dinnerDays, 'dinner');
+    populateDropdowns(meals, lunchDays, 'lunch');
   } catch (error) {
-    retries++;
-    if (retries < MAX_RETRIES) {
-      console.warn(`Retrying meal dropdown population (attempt ${retries}/${MAX_RETRIES})...`);
-      await populateAllMealDropdowns(); // Retry recursively
-    } else {
-      console.error('Error fetching meals:', error);
-
-      const errorMessage = document.createElement('div');
-      errorMessage.classList.add('error-message');
-      errorMessage.textContent = 'An error occurred while fetching meals. Please try refreshing the page.';
-      document.body.insertBefore(errorMessage, document.body.firstChild);
-    }
+    console.error('Error fetching meals:', error);
+    const errorMessage = document.createElement('div');
+    errorMessage.classList.add('error-message');
+    errorMessage.textContent = 'An error occurred while fetching meals. Please try refreshing the page.';
+    document.body.insertBefore(errorMessage, document.body.firstChild);
   }
 }
 
@@ -216,15 +174,7 @@ if (navigator.share && /Mobi/.test(navigator.userAgent)) { // Check if Web Share
 
 async function suggestMeals() {
   try {
-    const response = await fetch('https://marcuu.pythonanywhere.com/recipes', {
-      method: 'GET'
-    });
-
-    if (!response.ok) {
-      throw new Error(`Network response error: ${response.status}`);
-    }
-
-    const meals = await response.json();
+    const meals = await fetchWithRetry('https://marcuu.pythonanywhere.com/recipes');
 
     const dinnerMeals = meals.filter(meal => meal.mealType === 'dinner');
     const lunchMeals = meals.filter(meal => meal.mealType === 'lunch');
